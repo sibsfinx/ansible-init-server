@@ -1,0 +1,49 @@
+---
+- name: Setup Environment
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure user ansible exists
+      user:
+        name: ansible
+        shell: /bin/zsh
+        create_home: yes
+
+          #    - name: Install Zsh
+          #apt:
+          #name: zsh
+          #state: present
+          #update_cache: yes
+
+    - name: Install tmux
+      apt:
+        name: tmux
+        state: present
+        update_cache: yes
+
+    - name: Install git (required for Oh My Zsh)
+      apt:
+        name: git
+        state: present
+
+          #    - name: Install Oh My Zsh for user ansible
+          #become_user: ansible
+          #shell: sh -c "RUNZSH=no sh -c \"\$(wget -O- https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+
+          #    - name: Add SSH key to ansible
+          #authorized_key:
+          #user: ansible
+          #state: present
+          #key: "{{ lookup('file', 'id_rsa.pub') }}"
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: latest
+        update_cache: yes
+
+    - name: Install Docker Compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'

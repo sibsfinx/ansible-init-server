@@ -1,0 +1,2 @@
+[webservers]
+hetzner.chuvi.run ansible_ssh_user=ansible
