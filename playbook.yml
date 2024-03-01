@@ -5,9 +5,10 @@
   tasks:
     - name: Ensure user ansible exists
       user:
-        name: ansible
+        name: ansible-test
         shell: /bin/zsh
-        create_home: yes
+        create_home:
+          yes
 
           #    - name: Install Zsh
           #apt:
@@ -26,15 +27,32 @@
         name: git
         state: present
 
-          #    - name: Install Oh My Zsh for user ansible
-          #become_user: ansible
-          #shell: sh -c "RUNZSH=no sh -c \"\$(wget -O- https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+    - name: Configure git user
+      git_config:
+        name: user.name
+        value: "Aleks_ansible"
+        scope: global
 
-          #    - name: Add SSH key to ansible
-          #authorized_key:
-          #user: ansible
-          #state: present
-          #key: "{{ lookup('file', 'id_rsa.pub') }}"
+    - name: Configure git user
+      git_config:
+        name: user.email
+        value: "hello+ansible@alexmesch.com"
+        scope: global
+
+    - name: Configure git (to push current branch)
+      git_config:
+        push_default: current
+        scope: global
+
+    #    - name: Install Oh My Zsh for user ansible
+    #become_user: ansible
+    #shell: sh -c "RUNZSH=no sh -c \"\$(wget -O- https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+
+    #    - name: Add SSH key to ansible
+    #authorized_key:
+    #user: ansible
+    #state: present
+    #key: "{{ lookup('file', 'id_rsa.pub') }}"
 
     - name: Install Docker
       apt:
@@ -46,4 +64,4 @@
       get_url:
         url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
         dest: /usr/local/bin/docker-compose
-        mode: 'u+x,g+x'
+        mode: "u+x,g+x"
